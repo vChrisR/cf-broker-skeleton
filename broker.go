@@ -15,6 +15,7 @@ type broker struct {
 }
 
 func (b *broker) Services(context context.Context) []brokerapi.Service {
+	//fmt.Println(b.services)
 	return b.services
 }
 

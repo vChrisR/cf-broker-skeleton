@@ -19,7 +19,7 @@ func main() {
 		Password: config.BrokerPassword,
 	}
 
-	services, err := CatalogLoad()
+	services, err := CatalogLoad("./catalog.json")
 	if err != nil {
 		panic(err)
 	}
@@ -29,7 +29,7 @@ func main() {
 
 	//serviceBroker := NewBroker(services, logger, env)
 	serviceBroker := &broker{services: services, logger: logger, env: config}
-	brokerAPI := brokerapi.New(serviceBroker, logger, brokerCredentials)
-	http.Handle("/", brokerAPI)
+	brokerHandler := brokerapi.New(serviceBroker, logger, brokerCredentials)
+	http.Handle("/", brokerHandler)
 	http.ListenAndServe(":"+config.Port, nil)
 }

@@ -7,10 +7,10 @@ import (
 	"github.com/pivotal-cf/brokerapi"
 )
 
-func CatalogLoad() ([]brokerapi.Service, error) {
+func CatalogLoad(catalogFilePath string) ([]brokerapi.Service, error) {
 	var services []brokerapi.Service
 
-	inBuf, err := ioutil.ReadFile("./catalog.json")
+	inBuf, err := ioutil.ReadFile(catalogFilePath)
 	if err != nil {
 		return []brokerapi.Service{}, err
 	}
