@@ -1,4 +1,4 @@
-package broker
+package main
 
 import (
 	"context"
@@ -6,18 +6,12 @@ import (
 
 	"code.cloudfoundry.org/lager"
 	"github.com/pivotal-cf/brokerapi"
-	"github.com/vchrisr/cf-broker-skeleton/config"
 )
-
-//New Returns a ServiceBroker
-func New(services []brokerapi.Service, logger lager.Logger, env config.Env) brokerapi.ServiceBroker {
-	return &broker{services: services, logger: logger, env: env}
-}
 
 type broker struct {
 	services []brokerapi.Service
 	logger   lager.Logger
-	env      config.Env
+	env      Config
 }
 
 func (b *broker) Services(context context.Context) []brokerapi.Service {

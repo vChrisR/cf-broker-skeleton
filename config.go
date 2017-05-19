@@ -1,19 +1,19 @@
-package config
+package main
 
 import "github.com/kelseyhightower/envconfig"
 
-type Env struct {
+type Config struct {
 	BrokerUsername string `envconfig:"broker_username" required:"true"`
 	BrokerPassword string `envconfig:"broker_password" required:"true"`
 	LogLevel       string `envconfig:"log_level" default:"INFO"`
 	Port           string `envconfig:"port" default:"3000"`
 }
 
-func LoadEnv() (Env, error) {
-	var env Env
-	err := envconfig.Process("", &env)
+func ConfigLoad() (Config, error) {
+	var config Config
+	err := envconfig.Process("", &config)
 	if err != nil {
-		return Env{}, err
+		return Config{}, err
 	}
-	return env, nil
+	return config, nil
 }

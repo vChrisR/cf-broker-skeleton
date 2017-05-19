@@ -1,44 +1,25 @@
 package main
 
 import (
-	"encoding/json"
-	"io/ioutil"
 	"net/http"
 	"os"
 
 	"code.cloudfoundry.org/lager"
 	"github.com/pivotal-cf/brokerapi"
-	"github.com/vchrisr/cf-broker-skeleton/broker"
-	"github.com/vchrisr/cf-broker-skeleton/config"
 )
 
-func loadCatalog() ([]brokerapi.Service, error) {
-	var services []brokerapi.Service
-
-	inBuf, err := ioutil.ReadFile("./catalog.json")
-	if err != nil {
-		return []brokerapi.Service{}, err
-	}
-
-	err = json.Unmarshal(inBuf, &services)
-	if err != nil {
-		return []brokerapi.Service{}, err
-	}
-	return services, nil
-}
-
 func main() {
-	env, err := config.LoadEnv()
+	config, err := ConfigLoad()
 	if err != nil {
 		panic(err)
 	}
 
 	brokerCredentials := brokerapi.BrokerCredentials{
-		Username: env.BrokerUsername,
-		Password: env.BrokerPassword,
+		Username: config.BrokerUsername,
+		Password: config.BrokerPassword,
 	}
 
-	services, err := loadCatalog()
+	services, err := CatalogLoad()
 	if err != nil {
 		panic(err)
 	}
@@ -46,8 +27,9 @@ func main() {
 	logger := lager.NewLogger("static-broker")
 	logger.RegisterSink(lager.NewWriterSink(os.Stdout, lager.DEBUG))
 
-	serviceBroker := broker.New(services, logger, env)
+	//serviceBroker := NewBroker(services, logger, env)
+	serviceBroker := &broker{services: services, logger: logger, env: config}
 	brokerAPI := brokerapi.New(serviceBroker, logger, brokerCredentials)
 	http.Handle("/", brokerAPI)
-	http.ListenAndServe(":"+env.Port, nil)
+	http.ListenAndServe(":"+config.Port, nil)
 }
