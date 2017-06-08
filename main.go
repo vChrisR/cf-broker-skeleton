@@ -27,7 +27,7 @@ func main() {
 	logger := lager.NewLogger("static-broker")
 	logger.RegisterSink(lager.NewWriterSink(os.Stdout, lager.DEBUG))
 
-	erviceBroker := &broker{services: services, logger: logger, env: config}
+	serviceBroker := &broker{services: services, logger: logger, env: config}
 	brokerHandler := brokerapi.New(serviceBroker, logger, brokerCredentials)
 	http.Handle("/", brokerHandler)
 	http.ListenAndServe(":"+config.Port, nil)
