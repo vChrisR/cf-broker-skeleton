@@ -7,7 +7,7 @@ import (
 )
 
 func TestBrokerServices(t *testing.T) {
-	config, _ := ConfigLoad()
+	config, _ := brokerConfigLoad()
 	services, _ := CatalogLoad("./catalog.json")
 	serviceBroker := &broker{services: services, logger: nil, env: config}
 
@@ -18,7 +18,7 @@ func TestBrokerServices(t *testing.T) {
 }
 
 func TestBrokerBind(t *testing.T) {
-	config, _ := ConfigLoad()
+	config, _ := brokerConfigLoad()
 	services, _ := CatalogLoad("./catalog.json")
 	serviceBroker := &broker{services: services, logger: nil, env: config}
 
