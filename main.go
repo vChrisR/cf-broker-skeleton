@@ -9,14 +9,14 @@ import (
 )
 
 func main() {
-	config, err := ConfigLoad()
+	brokerConfig, err := brokerConfigLoad()
 	if err != nil {
 		panic(err)
 	}
 
 	brokerCredentials := brokerapi.BrokerCredentials{
-		Username: config.BrokerUsername,
-		Password: config.BrokerPassword,
+		Username: brokerConfig.BrokerUsername,
+		Password: brokerConfig.BrokerPassword,
 	}
 
 	services, err := CatalogLoad("./catalog.json")
@@ -27,8 +27,8 @@ func main() {
 	logger := lager.NewLogger("static-broker")
 	logger.RegisterSink(lager.NewWriterSink(os.Stdout, lager.DEBUG))
 
-	erviceBroker := &broker{services: services, logger: logger, env: config}
+	serviceBroker := &broker{services: services, logger: logger, env: brokerConfig}
 	brokerHandler := brokerapi.New(serviceBroker, logger, brokerCredentials)
 	http.Handle("/", brokerHandler)
-	http.ListenAndServe(":"+config.Port, nil)
+	http.ListenAndServe(":"+brokerConfig.Port, nil)
 }

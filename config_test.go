@@ -11,7 +11,7 @@ func TestDefaultConfigs(t *testing.T) {
 	os.Unsetenv("PORT")
 	os.Unsetenv("LOG_LEVEL")
 
-	config, err := ConfigLoad()
+	config, err := brokerConfigLoad()
 	if err != nil {
 		t.Error("Error loading config: ", err.Error())
 	}
@@ -37,7 +37,7 @@ func TestRequiredUsername(t *testing.T) {
 	os.Unsetenv("BROKER_USERNAME")
 	os.Setenv("BROKER_PASSWORD", "password")
 
-	_, err := ConfigLoad()
+	_, err := brokerConfigLoad()
 	if err == nil {
 		t.Error("No error was thrown while required config BROKER_USERNAME was not set.")
 	}
@@ -47,7 +47,7 @@ func TestRequiredPassword(t *testing.T) {
 	os.Setenv("BROKER_USERNAME", "broker")
 	os.Unsetenv("BROKER_PASSWORD")
 
-	_, err := ConfigLoad()
+	_, err := brokerConfigLoad()
 	if err == nil {
 		t.Error("No error was thrown while required config BROKER_USERNAME was not set.")
 	}

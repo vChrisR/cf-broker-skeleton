@@ -11,7 +11,7 @@ import (
 type broker struct {
 	services []brokerapi.Service
 	logger   lager.Logger
-	env      Config
+	env      BrokerConfig
 }
 
 func (b *broker) Services(context context.Context) []brokerapi.Service {
